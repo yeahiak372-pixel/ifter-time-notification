@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ramadan Time Reminder</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    color: white;
+    text-align: center;
+    padding: 40px;
+}
+
+.container{
+    background: rgba(255,255,255,0.1);
+    padding: 30px;
+    border-radius: 15px;
+    width: 350px;
+    margin: auto;
+}
+
+input{
+    padding: 10px;
+    width: 80%;
+    margin: 10px;
+    border-radius: 5px;
+    border: none;
+}
+
+button{
+    padding: 10px 20px;
+    background: #f9a825;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+h1{
+    margin-bottom: 20px;
+}
+</style>
+</head>
+<body>
+
+<h1>🌙 Ramadan Sehri & Iftar Reminder</h1>
+
+<div class="container">
+    <h3>Set Today's Time</h3>
+    <label>Sehri Time:</label><br>
+    <input type="time" id="sehriTime"><br>
+
+    <label>Iftar Time:</label><br>
+    <input type="time" id="iftarTime"><br>
+
+    <button onclick="startReminder()">Start Reminder</button>
+</div>
+
+<audio id="azanSound">
+    <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3">
+</audio>
+
+<script>
+function startReminder(){
+    if(Notification.permission !== "granted"){
+        Notification.requestPermission();
+    }
+
+    setInterval(function(){
+        let now = new Date();
+        let currentTime = now.getHours().toString().padStart(2,'0') + ":" + 
+                          now.getMinutes().toString().padStart(2,'0');
+
+        let sehri = document.getElementById("sehriTime").value;
+        let iftar = document.getElementById("iftarTime").value;
+
+        if(currentTime === sehri){
+            showNotification("Sehri Time!", "Wake up! Sehri time has started.");
+        }
+
+        if(currentTime === iftar){
+            showNotification("Iftar Time!", "It's time to break your fast.");
+        }
+
+    }, 60000);
+}
+
+function showNotification(title, message){
+    new Notification(title, { body: message });
+    document.getElementById("azanSound").play();
+}
+</script>
+
+</body>
+</html>
